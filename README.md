@@ -1,164 +1,126 @@
-# TaskFlow — Team Task Manager
+# TaskFlow - Team Task Manager
 
-A full-stack web application where teams can create projects, assign tasks, and track progress with **role-based access control (Admin/Member)**.
+A full-stack web application where teams can create projects, assign tasks, and track progress with role-based access control (Admin/Member).
 
 ---
 
 ## Live Demo
 
-🔗 **Live App** — https://taskflow-production-821c.up.railway.app
+Live App: https://taskflow-production-821c.up.railway.app
 
-📁 **GitHub Repo** — https://github.com/MasterJoD/taskflow
+GitHub Repo: https://github.com/MasterJoD/taskflow
 
 ---
 
 ## Features
 
-### Authentication
-- Secure Signup and Login
-- JWT-based session management
-- Passwords hashed with bcryptjs
-
-### Project Management
-- Create and manage multiple projects
+- User signup and login with JWT authentication
+- Create and manage projects
 - Invite team members by email
-- Admin can remove members
-
-### Task Management
-- Create tasks with title, description, priority (Low / Medium / High)
+- Create tasks with title, description, priority and due date
 - Assign tasks to team members
-- Set due dates
-- Track status: **To Do → In Progress → Done**
-- Overdue task detection
-
-### Role-Based Access Control
-
-| Feature | Admin | Member |
-|---|---|---|
-| Create project | ✅ | ❌ |
-| Invite members | ✅ | ❌ |
-| Create tasks | ✅ | ❌ |
-| Assign tasks | ✅ | ❌ |
-| Delete tasks | ✅ | ❌ |
-| Update task status | ✅ | ✅ (own tasks only) |
-| View dashboard | ✅ | ✅ |
-
-### Dashboard
-- Total projects count
-- Total tasks count
-- Tasks assigned to current user
-- Overdue tasks count
-- Progress bars (To Do / In Progress / Done)
+- Track task status: To Do, In Progress, Done
+- Role-based access: Admins manage everything, Members update their own task status
+- Dashboard showing total projects, tasks, assigned tasks and overdue count
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Backend | Node.js, Express.js |
-| Database | NeDB (file-based NoSQL) |
-| Authentication | JWT + bcryptjs |
-| Frontend | HTML, CSS, JavaScript (Vanilla) |
-| Deployment | Railway |
+- Backend: Node.js, Express.js
+- Database: NeDB (file-based NoSQL)
+- Authentication: JWT and bcryptjs
+- Frontend: HTML, CSS, JavaScript
+- Deployment: Railway
 
 ---
 
 ## Project Structure
 
-```
 taskflow/
 ├── backend/
-│   ├── server.js              # Express app entry point
-│   ├── db/
-│   │   └── index.js           # Database setup (NeDB)
-│   ├── middleware/
-│   │   └── auth.js            # JWT authentication middleware
+│   ├── server.js
+│   ├── db/index.js
+│   ├── middleware/auth.js
 │   └── routes/
-│       ├── auth.js            # Signup, Login, Me
-│       ├── projects.js        # Project CRUD + member management
-│       ├── tasks.js           # Task CRUD + dashboard stats
-│       └── users.js           # User search
+│       ├── auth.js
+│       ├── projects.js
+│       ├── tasks.js
+│       └── users.js
 ├── frontend/
-│   ├── index.html             # Single page app
-│   ├── style.css              # All styles
-│   └── app.js                 # Frontend logic
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── package.json
-├── .env.example
 └── README.md
-```
 
 ---
 
 ## API Endpoints
 
-### Auth
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/auth/signup` | Register new user |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Get current user |
+Auth
+- POST /api/auth/signup
+- POST /api/auth/login
+- GET  /api/auth/me
 
-### Projects
-| Method | Endpoint | Description | Role |
-|---|---|---|---|
-| GET | `/api/projects` | Get all projects | Any |
-| POST | `/api/projects` | Create project | Any |
-| GET | `/api/projects/:id` | Get project details | Member+ |
-| PUT | `/api/projects/:id` | Update project | Admin |
-| DELETE | `/api/projects/:id` | Delete project | Admin |
-| POST | `/api/projects/:id/invite` | Invite member by email | Admin |
-| DELETE | `/api/projects/:id/members/:userId` | Remove member | Admin |
+Projects
+- GET    /api/projects
+- POST   /api/projects
+- GET    /api/projects/:id
+- PUT    /api/projects/:id
+- DELETE /api/projects/:id
+- POST   /api/projects/:id/invite
+- DELETE /api/projects/:id/members/:userId
 
-### Tasks
-| Method | Endpoint | Description | Role |
-|---|---|---|---|
-| GET | `/api/tasks?projectId=xxx` | Get tasks for project | Any |
-| POST | `/api/tasks` | Create task | Admin |
-| PUT | `/api/tasks/:id` | Update task | Admin / Member (status only) |
-| DELETE | `/api/tasks/:id` | Delete task | Admin |
-| GET | `/api/tasks/dashboard` | Get dashboard stats | Any |
+Tasks
+- GET    /api/tasks?projectId=xxx
+- POST   /api/tasks
+- PUT    /api/tasks/:id
+- DELETE /api/tasks/:id
+- GET    /api/tasks/dashboard
+
+---
+
+## Role-Based Access
+
+Admin:
+- Create and delete projects
+- Invite and remove members
+- Create, assign and delete tasks
+- Update task status
+
+Member:
+- View project and tasks
+- Update status of tasks assigned to them
 
 ---
 
 ## Run Locally
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/MasterJoD/taskflow.git
-cd taskflow
+1. Clone the repo
+   git clone https://github.com/MasterJoD/taskflow.git
+   cd taskflow
 
-# 2. Install dependencies
-npm install
+2. Install dependencies
+   npm install
 
-# 3. Create .env file
-cp .env.example .env
-# Edit .env and change JWT_SECRET to any random string
+3. Create .env file
+   cp .env.example .env
+   Change JWT_SECRET to any random string
 
-# 4. Start the server
-npm start
+4. Start the server
+   npm start
 
-# 5. Open in browser
-# Go to http://localhost:3000
-```
+5. Open http://localhost:3000 in your browser
 
 ---
 
-## Deployment (Railway)
+## Deployment
 
-1. Push code to GitHub
-2. Go to [railway.app](https://railway.app) → New Project → Deploy from GitHub
-3. Select this repository
-4. Add environment variables in the Variables tab:
-   - `JWT_SECRET` = any random secret string
-   - `DB_PATH` = `./data`
-5. Go to Settings → Networking → Generate Domain
-6. App is live ✅
+Deployed on Railway.
+Environment variables required:
+- JWT_SECRET: any random secret string
+- DB_PATH: ./data
 
 ---
 
-## Author
-
-Built as part of Full-Stack Developer Assessment.
-
-> Completed within the given timeline of 1-2 days.
